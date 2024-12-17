@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
-<body>
+    
+<body style="margin-left: 10%">
 <h2>Dodaj zadanie</h2>
 <form action="add.php" method="POST">
-    Zadanie:<textarea name="todo"></textarea><br/>
-    <input type="submit" />
+    <span style="vertical-align: top;">Zadanie:</span>&nbsp;<textarea name="todo"></textarea><br/>
+    <span style="text-align: right;"><input type="button" value="Anuluj" onclick="location.href='/todolist'" />&nbsp;<input type="submit" /></span>
 </form>
+</div>
 </body>

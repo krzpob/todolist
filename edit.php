@@ -1,15 +1,18 @@
 <?PHP 
 session_start();
+require_once 'db.php';
 
 if($_GET!=null && $_GET['id']!=null){
-    $id=$_GET['id'];
+    $id=$conn->real_escape_string($_GET['id']);
 } else {
-    $id=$_POST['id'];
-    $_SESSION['todolist'][$id]['name']=$_POST['todo'];
+    $id=$conn->real_escape_string($_POST['id']);
+    $todo=$conn->real_escape_string($_POST['todo']);
+    $conn->query("UPDATE tasks SET task='$todo'");
     header('Location: index.php', true,302);
 }
 
-$task= $_SESSION['todolist'][$id]
+$result = $conn->query("SELECT * FROM tasks WHERE id='{$id}'");
+$task = $result->fetch_assoc();
 
 ?>
 <!DOCTYPE html>
@@ -19,8 +22,12 @@ $task= $_SESSION['todolist'][$id]
 <h2>Edytuj zadanie</h2>
 <form action="edit.php" method="POST">
     <input type="hidden" name="id" value="<?php echo $id ?>" />
-    <span style="vertical-align: top;">Zadanie:</span>&nbsp;<textarea name="todo"><?= $task['name'] ?></textarea><br/>
+    <span style="vertical-align: top;">Zadanie:</span>&nbsp;<textarea name="todo"><?= $task['task'] ?></textarea><br/>
     <span style="text-align: right;"><input type="button" value="Anuluj" onclick="location.href='/todolist'" />&nbsp;<input type="submit" /></span>
 </form>
 </div>
 </body>
+
+<?php
+$result->free_result();
+$conn->close();

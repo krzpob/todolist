@@ -1,10 +1,8 @@
 <?PHP
 session_start();
 
-if($_SESSION!=null && $_SESSION['todolist']==null) {
-    $_SESSION['todolist'] = [];
-}
-
+require_once 'db.php';
+$todolist=$conn->query('SELECT * FROM tasks ORDER BY id')
 
 ?>
 
@@ -43,11 +41,11 @@ if($_SESSION!=null && $_SESSION['todolist']==null) {
     <thead><tr><td class="id">Id</td><td classs="task-name">Zadanie</td><td>Status</td><td>Akcja</td></tr></thead>
     <tbody>
     <?php
-    foreach($_SESSION['todolist'] as $id => $todo){
-        echo "<tr><td class='id'>$id</td><td class='task-name'>{$todo['name']}</td><td>{$todo['status']}</td><td>
-        <a href=\"delete.php?id=$id\">Usuń</a>&nbsp
-        <a href=\"edit.php?id=$id\">Edycja</a>";
-        if($todo['status']!='DONE'){ echo "<a href=\"done.php?id=$id\">Zrobione</a> "; }
+    foreach($todolist as $id => $todo){
+        echo "<tr><td class='id'>{$todo['id']}</td><td class='task-name'>{$todo['task']}</td><td>{$todo['status']}</td><td>
+        <a href=\"delete.php?id={$todo['id']}\">Usuń</a>&nbsp
+        <a href=\"edit.php?id={$todo['id']}\">Edycja</a>";
+        if($todo['status']!='DONE'){ echo "<a href=\"done.php?id={$todo['id']}\">Zrobione</a> "; }
         echo "</td></tr>";
     }
     ?>
@@ -55,3 +53,8 @@ if($_SESSION!=null && $_SESSION['todolist']==null) {
 </table>
 
 </body>
+
+
+<?php
+$todolist->free_result();
+$conn->close();

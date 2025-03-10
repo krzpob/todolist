@@ -1,0 +1,24 @@
+header {
+    text-align: right;
+}
+
+thead {
+    font-weight: bold;
+}
+table, th, td {
+    border: 1px solid;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.id {
+    width: 3em;
+    margin: 10px 10px;
+}
+
+.task-name {
+    width: 10em;
+    margin: 10px 10px;
+}

@@ -1,48 +1,47 @@
 <?PHP
 session_start();
 
+if (!isset($_SESSION['google_loggedin'])) {
+    header('Location: login.php');
+    exit;
+}
+
 require_once 'db.php';
-$todolist=$conn->query('SELECT * FROM tasks ORDER BY id')
+$google_loggedin = $_SESSION['google_loggedin'];
+$google_email = $_SESSION['google_email'];
+
+$todolist=$conn->query("SELECT * FROM tasks WHERE email='$google_email' ORDER BY id");
+
 
 ?>
 
 <!DOCTYPE html>
 <html>
+ <?php 
+      require_once 'bootstrap-init.php';  
+ ?>   
 <style >
-        thead {
-            font-weight: bold;
-        }
-        table, th, td {
-            border: 1px solid;
-        }
-
-        table {
-            border-collapse: collapse;
-        }
-
-        .id {
-            width: 3em;
-            margin: 10px 10px;
-        }
-
-        .task-name {
-            width: 10em;
-            margin: 10px 10px;
-        }
+        
     </style>
+    <link href="mystyle.css" rel="stylesheet">
 <body style="margin-left: 10%">
-    
+<header>
+        <a href="logout.php">Wyloguj się</a> 
+</header>
 <h2>
-    Lista zadań do zrobienia
+    Lista zadań do zrobienia dla (<?php echo $google_email ?>)
 </h2>
 <a href="add.html">Dodaj zadanie</a>
     </br></br>
-<table>
-    <thead><tr><td class="id">Id</td><td classs="task-name">Zadanie</td><td>Status</td><td>Akcja</td></tr></thead>
+    <div class="conatiner ">
+        <div class="row">
+            <div class="col-8">
+            <table class="table table-success table-striped">
+    <thead><tr><th class="id" scope="col">Id</th><th classs="task-name" scope="col">Zadanie</th><th scope="col">Status</th><th scope="col">Akcja</th></tr></thead>
     <tbody>
     <?php
     foreach($todolist as $id => $todo){
-        echo "<tr><td class='id'>{$todo['id']}</td><td class='task-name'>{$todo['task']}</td><td>{$todo['status']}</td><td>
+        echo "<tr><th class='id' scope='row'>{$todo['id']}</th><td class='task-name'>{$todo['task']}</td><td>{$todo['status']}</td><td>
         <a href=\"delete.php?id={$todo['id']}\">Usuń</a>&nbsp
         <a href=\"edit.php?id={$todo['id']}\">Edycja</a>";
         if($todo['status']!='DONE'){ echo "<a href=\"done.php?id={$todo['id']}\">Zrobione</a> "; }
@@ -52,6 +51,13 @@ $todolist=$conn->query('SELECT * FROM tasks ORDER BY id')
     </tbody>
 </table>
 
+            </div>
+        </div>
+    </div>
+
+<?php 
+      require_once 'bootstrap-js.php';  
+ ?>   
 </body>
 
 

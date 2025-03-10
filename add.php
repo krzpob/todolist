@@ -1,9 +1,13 @@
 <?PHP
 session_start();
+require_once 'google-logged.php';
+
 require_once 'db.php';
 
-$conn->query("INSERT INTO tasks (task) VALUES ('".$_POST['todo']."')");
+$google_email = $_SESSION['google_email'];
+
+$conn->query("INSERT INTO tasks (task, email) VALUES ('".$_POST['todo']."','".$google_email."')");
 $conn->close();
-$_SESSION['todolist'][]=['name'=> $_POST['todo'],'status'=> 'TODO'];
+
 header('Location: index.php', true,302);
 exit;
